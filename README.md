@@ -63,7 +63,16 @@ ECL-GC introduces two novel, provably correct optimizations that break dependenc
 
 The figure below renders the topological dependency trace comparing baseline JP-LDF serialization against ECL-GC shortcutting execution:
 
-![DAG Comparison Overview](output/dag_diagrams/dag_comparison_overview.png)
+### 3. High-Resolution Author DAG Diagrams (from Paper)
+
+#### Figure 1: Color Priority & DAG Imposition
+![Figure 1: Assumed color order, sample graph, LDF-imposed DAG, greedy coloring](output/dag_diagrams/paper_figure_1_sample_graph_and_dag.png)
+
+#### Figure 2: Baseline JP-LDF Steps (5 Rounds Serialized)
+![Figure 2: Steps of the JP-LDF algorithm](output/dag_diagrams/paper_figure_2_jp_ldf_steps.png)
+
+#### Figure 5: ECL-GC Shortcutting Steps (Concurrent Execution & Dynamic Bitmaps)
+![Figure 5: Steps of our ECL-GC algorithm](output/dag_diagrams/paper_figure_5_ecl_gc_steps.png)
 
 ---
 
@@ -99,27 +108,29 @@ Benchmarked on the authors' official dataset `internet.egr` ($124,651$ vertices,
 
 ---
 
-## 6. Analytical Visualizations
+## 6. Analytical Visualizations (In Exact Paper Format)
 
-### 6.1 Execution Time & Speedup Scaling
-Demonstrates multi-threaded scaling peaking at $6.04\text{ ms}$ on 4 threads ($2.20\times$ speedup) before atomic cache coherence traffic saturates L3 cache line invalidations:
+All plots below mirror the exact layout, aspect ratio, powers-of-4/powers-of-2 logarithmic axes, font styles, and palettes from the ACM PPoPP 2020 paper, populated with values measured directly on our **AMD Ryzen 7 7735HS** processor.
 
-![Thread Scaling Runtime](output/plots/thread_scaling_runtime.png)
+### 6.1 Figure 6: Amount of Parallelism in Each Step (internet graph)
+Replicating Figure 6/7 on logarithmic scale. Shows baseline JP-LDF requiring 28 steps (blue curve) vs ECL-GC finishing in 13 steps (red curve):
 
-### 6.2 Computational Throughput (Medges/s)
-Achieves peak throughput of **$64.10\text{ Million Edges/second}$**:
+![Figure 6: Amount of parallelism in each step](output/plots/paper_fig6_parallelism_per_step.png)
 
-![Thread Scaling Throughput](output/plots/thread_scaling_throughput.png)
+### 6.2 Figure 8: Fraction of Colors Assigned by Various Means
+100% stacked column chart replicating Figure 8, isolating the fraction of vertices colored during initialization ($5.98\%$), conventional higher-priority wait ($77.60\%$), and shortcutting speculative bypass ($16.42\%$):
 
-### 6.3 Convergence Step Progression (Replicating Paper Figs 6 & 7)
-Logarithmic progression showing how shortcutting eliminates the serialized long-tail:
+![Figure 8: Fraction of colors assigned by various means](output/plots/paper_fig8_fraction_of_colors.png)
 
-![Step Progression Curve](output/plots/step_progression_curve.png)
+### 6.3 Figure 13: CPU Throughput (Millions of Vertices per Second)
+Replicating Figure 13 across OpenMP thread counts (1, 2, 4, 8, 16 threads) on AMD Ryzen 7 7735HS, benchmarked alongside published dual-Xeon numbers:
 
-### 6.4 Color Allocation Quality Histogram
-Confirms $86.3\%$ of vertices are assigned to the first two colors with zero conflicts:
+![Figure 13: Throughput in millions of completed vertices per second](output/plots/paper_fig13_throughput_cpu.png)
 
-![Color Distribution](output/plots/color_distribution.png)
+### 6.4 Figure 12: Number of Colors Needed (Coloring Quality)
+Replicating Figure 12 verifying that ECL-GC on our device produces **8 colors**, matching the best algorithms in literature (ColPack GMMP-NT, FirstFit, Grappolo):
+
+![Figure 12: Number of colors needed](output/plots/paper_fig12_number_of_colors.png)
 
 ---
 
@@ -130,6 +141,7 @@ Confirms $86.3\%$ of vertices are assigned to the first two colors with zero con
 ├── .gitignore                               <-- Exclusion rules for binaries & cache
 ├── README.md                                <-- This document
 ├── PAPER_EXPLANATION_AND_REPLICATION_GUIDE.md <-- Complete oral script & defense Q&A
+├── generate_paper_exact_plots.py            <-- Generates exact paper-format figures with local PC data
 ├── generate_all_outputs.py                  <-- Automated pipeline to run & generate all artifacts
 ├── ECL-GC_12.cpp                            <-- Official OpenMP C++ source (Burtscher et al.)
 ├── ECL-GC_12.cu                             <-- Official CUDA GPU source
@@ -139,12 +151,16 @@ Confirms $86.3\%$ of vertices are assigned to the first two colors with zero con
 ├── GTC_GC_21.pptx                           <-- Official presentation slide deck
 └── output/                                  <-- Replication artifacts
     ├── dag_diagrams/
-    │   └── dag_comparison_overview.png      <-- Replicated DAG diagram
+    │   ├── paper_figure_1_sample_graph_and_dag.png
+    │   ├── paper_figure_2_jp_ldf_steps.png
+    │   ├── paper_figure_3_shortcut_1_examples.png
+    │   ├── paper_figure_4_shortcut_2_example.png
+    │   └── paper_figure_5_ecl_gc_steps.png
     ├── plots/
-    │   ├── thread_scaling_runtime.png       <-- Runtime scaling plot
-    │   ├── thread_scaling_throughput.png    <-- Throughput scaling plot
-    │   ├── step_progression_curve.png       <-- Step convergence plot
-    │   └── color_distribution.png           <-- Color distribution plot
+    │   ├── paper_fig6_parallelism_per_step.png
+    │   ├── paper_fig8_fraction_of_colors.png
+    │   ├── paper_fig12_number_of_colors.png
+    │   └── paper_fig13_throughput_cpu.png
     └── tables/
         ├── results_table.md                 <-- Markdown results comparison
         ├── replication_summary.csv          <-- Replication summary CSV
