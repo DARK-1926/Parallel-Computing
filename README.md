@@ -181,13 +181,22 @@ Replicating Figure 12 verifying that ECL-GC on our device produces **8 colors**,
 python generate_all_outputs.py
 ```
 
-### Manual Compilation & Execution
-```bash
-# Compile OpenMP implementation
-g++ -O3 -fopenmp ECL-GC_12.cpp -o ecl-gc.exe
+### OpenMP Compilation & Execution
 
-# Run on internet.egr with 8 threads
-./ecl-gc.exe internet.egr 8
+Three standalone, production-ready OpenMP programs are provided:
+
+```bash
+# 1. Baseline Jones-Plassmann (JP-LDF) without shortcuts
+g++ -O3 -fopenmp jp_ldf_openmp.cpp -o jp_ldf.exe
+./jp_ldf.exe internet.egr 8
+
+# 2. ECL-GC with Shortcut 1 (speculative bypass) and Shortcut 2 (edge pruning)
+g++ -O3 -fopenmp ecl_gc_openmp.cpp -o ecl_gc.exe
+./ecl_gc.exe internet.egr 8
+
+# 3. Direct Side-by-Side Comparative Benchmark (Table 4 Replication)
+g++ -O3 -fopenmp compare_jp_vs_ecl.cpp -o compare_jp_vs_ecl.exe
+./compare_jp_vs_ecl.exe internet.egr 8
 ```
 
 ---
