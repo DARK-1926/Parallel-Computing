@@ -1,0 +1,20 @@
+# Compiled Binaries
+*.exe
+*.o
+*.obj
+*.dll
+*.so
+
+# Temporary & Lock files
+~$*
+*.tmp
+*.log
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# System & IDE files
+.vscode/
+.idea/
+.DS_Store

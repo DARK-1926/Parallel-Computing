@@ -1,0 +1,2 @@
+Graph,Vertices,Edges,Average_Degree,Baseline_Steps_w_o_Shortcuts,Paper_Baseline_Steps,ECL_GC_Steps_with_Shortcuts,Paper_ECL_GC_Steps,Baseline_Avg_Parallelism,Paper_Baseline_Avg_Parallelism,ECL_GC_Avg_Parallelism,Paper_ECL_GC_Avg_Parallelism,Increase_in_Parallelism,Paper_Increase_in_Parallelism,Colors_Used,Best_CPU_Runtime_ms,Peak_Throughput_Medges_s
+internet.egr,124651,387240,3.1065936093573256,28,27,13,13,4451.821428571428,4616.7,9588.538461538461,9588.5,2.1538461538461537,2.08,8,6.041,64.101968
